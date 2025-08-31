@@ -244,7 +244,7 @@ const AdminReturns = () => {
                         {format(new Date(returnItem.createdAt), 'MMM dd, yyyy HH:mm')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                        {returnItem.cashierEmail}
+                        {returnItem.cashierName || returnItem.cashierEmail.split('@')[0]}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                         {returnItem.customerName || 'N/A'}
@@ -357,7 +357,9 @@ const AdminReturns = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600 dark:text-gray-400">Cashier:</span>
-                      <span className="text-gray-900 dark:text-white">{selectedReturn.cashierEmail}</span>
+                      <span className="text-gray-900 dark:text-white">
+                        {selectedReturn.cashierName || selectedReturn.cashierEmail.split('@')[0]}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600 dark:text-gray-400">Status:</span>

@@ -7,19 +7,22 @@
     "name": "WhirlTech Solutions",
     "email": "info@whirltech.com"
   },
-  "main": "electron/main.cjs",
+  "main": "electron/main.js",
   "scripts": {
     "dev": "vite",
-    "build": "set ELECTRON=true && vite build",
-    "lint": "eslint .",
+    "build": "vite build",
     "preview": "vite preview",
-    "electron:dev": "set ELECTRON=true && electron .",
-    "electron:build": "set ELECTRON=true && vite build && electron-builder",
-    "electron:package": "set ELECTRON=true && npm run build && electron-builder build --win"
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "electron:dev": "concurrently \"cross-env NODE_ENV=development vite --port 5174\" \"wait-on tcp:5174 && cross-env NODE_ENV=development electron .\"",
+    "electron:build": "npm run build && electron-builder",
+    "electron:package": "npm run build && electron-builder build --win"
   },
   "dependencies": {
     "chart.js": "^4.4.0",
     "date-fns": "^2.30.0",
+    "electron-squirrel-startup": "^1.0.1",
     "html2canvas": "^1.4.1",
     "html5-qrcode": "^2.3.8",
     "i18next": "^23.7.6",
@@ -65,6 +68,8 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.0.0",
     "electron": "^37.4.0",
     "electron-builder": "^26.0.12",
     "electron-is-dev": "^3.0.1",
@@ -76,6 +81,7 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.3.0",
-    "vite": "^5.4.2"
+    "vite": "^5.4.2",
+    "wait-on": "^8.0.4"
   }
 }

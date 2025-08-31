@@ -444,7 +444,7 @@ const Reports = () => {
     const returnsData = [
       ['RETURNS DETAILS'],
       [''],
-      ['Return Number', 'Date', 'Status', 'Cashier', 'Customer', 'Product Name', 'Quantity', `Unit Price (${shopSettings.currency})`, `Total Value (${shopSettings.currency})`, 'Approved By', 'Approved Date']
+      ['Return Number', 'Date', 'Status', 'Cashier', 'Customer', 'Product Name', 'Quantity', `Unit Price (${shopSettings.currency})`, `Total Value (${shopSettings.currency})`, 'Approved By', 'Approved Date', 'Rejected Date']
     ];
     
     filteredReturns.forEach(returnItem => {
@@ -454,14 +454,15 @@ const Reports = () => {
             returnItem.returnNumber,
             format(new Date(returnItem.createdAt), 'yyyy-MM-dd'),
             returnItem.status.toUpperCase(),
-            returnItem.cashierEmail,
+            returnItem.cashierName || returnItem.creatorEmail || 'Cashier', // Use cashierName with fallback to creatorEmail
             returnItem.customerName || 'N/A',
             item.productName || 'Unknown Product',
             item.quantity || 0,
             Math.round(item.productPrice || 0),
             Math.round((item.productPrice || 0) * (item.quantity || 0)),
-            returnItem.adminEmail || '',
-            returnItem.approvedAt ? format(new Date(returnItem.approvedAt), 'yyyy-MM-dd') : ''
+            returnItem.approvedCashierName || 'Cashier', // Show selected cashier's name
+            returnItem.approvedAt ? format(new Date(returnItem.approvedAt), 'yyyy-MM-dd') : '',
+            returnItem.rejectedAt ? format(new Date(returnItem.rejectedAt), 'yyyy-MM-dd') : ''
           ]);
         });
       } else {
@@ -470,14 +471,15 @@ const Reports = () => {
           returnItem.returnNumber,
           format(new Date(returnItem.createdAt), 'yyyy-MM-dd'),
           returnItem.status.toUpperCase(),
-          returnItem.cashierEmail,
+          returnItem.cashierName || returnItem.creatorEmail || 'Cashier', // Use cashierName with fallback to creatorEmail
           returnItem.customerName || 'N/A',
           'Mixed Items',
           returnItem.totalItems || 0,
           '',
           Math.round(returnItem.totalValue || 0),
-          returnItem.adminEmail || '',
-          returnItem.approvedAt ? format(new Date(returnItem.approvedAt), 'yyyy-MM-dd') : ''
+          returnItem.approvedCashierName || 'Cashier', // Show selected cashier's name
+          returnItem.approvedAt ? format(new Date(returnItem.approvedAt), 'yyyy-MM-dd') : '',
+          returnItem.rejectedAt ? format(new Date(returnItem.rejectedAt), 'yyyy-MM-dd') : ''
         ]);
       }
     });
@@ -486,7 +488,7 @@ const Reports = () => {
     returnsWS['!cols'] = [
       { width: 15 }, { width: 12 }, { width: 12 }, { width: 25 }, 
       { width: 20 }, { width: 30 }, { width: 10 }, { width: 15 }, 
-      { width: 18 }, { width: 25 }, { width: 15 }
+      { width: 18 }, { width: 25 }, { width: 15 }, { width: 15 }
     ];
     XLSX.utils.book_append_sheet(wb, returnsWS, 'Returns Details');
 
@@ -500,6 +502,10 @@ const Reports = () => {
     filteredGRNs.forEach(grn => {
       if (grn.items && grn.items.length > 0) {
         grn.items.forEach(item => {
+          const quantity = parseFloat(item.quantity) || 0;
+          const price = parseFloat(item.price) || 0;
+          const total = quantity * price;
+          
           grnData.push([
             grn.grnNumber,
             format(new Date(grn.createdAt), 'yyyy-MM-dd'),
@@ -507,11 +513,11 @@ const Reports = () => {
             grn.supplierContact || '',
             grn.invoiceNumber || '',
             item.name || 'Unknown Product',
-            item.quantity || 0,
-            Math.round(item.unitCost || 0),
-            Math.round((item.unitCost || 0) * (item.quantity || 0)),
+            quantity,
+            price,
+            total,
             grn.status.toUpperCase(),
-            grn.createdBy,
+            grn.cashierName || grn.createdBy || 'Unknown',
             grn.notes || ''
           ]);
         });

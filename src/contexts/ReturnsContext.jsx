@@ -78,10 +78,7 @@ export const ReturnsProvider = ({ children }) => {
         ...returnData,
         id: returnId,
         status: 'pending',
-
-        createdAt: new Date().toISOString(),
-        createdBy: currentUser.id,
-        cashierEmail: currentUser.email
+        createdAt: new Date().toISOString()
       };
 
       // Save to localStorage
@@ -125,7 +122,9 @@ export const ReturnsProvider = ({ children }) => {
               status: 'approved',
               approvedAt: new Date().toISOString(),
               approvedBy: currentUser.id,
-              adminEmail: currentUser.email
+              adminEmail: currentUser.email,
+              adminName: currentUser.name, // Admin who approved
+              approvedCashierName: ret.cashierName || ret.creatorEmail || 'Cashier' // Preserve original cashier info
             }
           : ret
       );
@@ -138,7 +137,9 @@ export const ReturnsProvider = ({ children }) => {
               status: 'approved',
               approvedAt: new Date().toISOString(),
               approvedBy: currentUser.id,
-              adminEmail: currentUser.email
+              adminEmail: currentUser.email,
+              adminName: currentUser.name,
+              approvedCashierName: ret.cashierName || ret.creatorEmail || 'Cashier'
             }
           : ret
       ));
@@ -160,6 +161,7 @@ export const ReturnsProvider = ({ children }) => {
               rejectedAt: new Date().toISOString(),
               rejectedBy: currentUser.id,
               adminEmail: currentUser.email,
+              adminName: currentUser.name, // Add admin name
               rejectionReason
             }
           : ret
@@ -174,6 +176,7 @@ export const ReturnsProvider = ({ children }) => {
               rejectedAt: new Date().toISOString(),
               rejectedBy: currentUser.id,
               adminEmail: currentUser.email,
+              adminName: currentUser.name,
               rejectionReason
             }
           : ret

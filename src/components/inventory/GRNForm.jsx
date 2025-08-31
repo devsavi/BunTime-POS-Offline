@@ -119,6 +119,8 @@ const GRNForm = ({ onClose }) => {
         shopId: defaultShop.id,
         createdAt: new Date().toISOString(),
         createdBy: currentUser.email,
+        cashierName: currentUser.name,  // Add the cashier name
+        creatorEmail: currentUser.email, // Add the creator email
         status: 'received'
       };
 

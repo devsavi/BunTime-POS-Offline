@@ -2,11 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https: wss: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:;">
     <!-- Favicon for different browsers and devices -->
-    <link rel="icon" type="image/x-icon" href="./bun_icon.ico" />
-    <link rel="shortcut icon" type="image/x-icon" href="./bun_icon.ico" />
+    <link rel="icon" type="image/x-icon" href="/bun_icon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="/bun_icon.ico" />
     <!-- Apple touch icon for iOS devices -->
-    <link rel="apple-touch-icon" href="./bunt_icon.ico" />
+    <link rel="apple-touch-icon" href="/bun_icon.ico" />
+    <base href="./" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Page title and description -->
@@ -19,12 +22,13 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="./src/main.tsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
     <script>
       // Handle file protocol for Electron
       if (window.location.protocol === 'file:') {
+        window.__TAURI__ = true;
         const base = document.createElement('base');
-        base.href = './';
+        base.href = window.ASSET_PREFIX || './';
         document.head.appendChild(base);
       }
     </script>

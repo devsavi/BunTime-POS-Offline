@@ -24,7 +24,6 @@ const BillPreview = ({
   // Debug log for settings and warn if no cashier selected
   React.useEffect(() => {
     console.log('Shop Settings:', shopSettings);
-    console.log('Business Settings:', businessSettings);
     
     if (!selectedCashier) {
       toast.error('Please select a cashier before proceeding', {
@@ -32,7 +31,7 @@ const BillPreview = ({
         id: 'no-cashier-warning'
       });
     }
-  }, [shopSettings, businessSettings, selectedCashier]);
+  }, [shopSettings, selectedCashier]);
 
   const generateBillNumber = () => {
     const now = new Date();
@@ -376,10 +375,10 @@ const BillPreview = ({
         <div className="p-8 bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
           {/* Shop Header */}
           <div className="text-center mb-8">
-            {/* Invoice Logo - Try both business and shop settings */}
-            {(businessSettings.invoiceLogoBase64 || shopSettings.invoiceLogoBase64) && (
+            {/* Invoice Logo */}
+            {shopSettings.invoiceLogoBase64 && (
               <img
-                src={businessSettings.invoiceLogoBase64 || shopSettings.invoiceLogoBase64}
+                src={shopSettings.invoiceLogoBase64}
                 alt="Shop Logo"
                 className="max-h-20 mx-auto mb-4 object-contain"
               />

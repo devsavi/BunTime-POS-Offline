@@ -30,7 +30,8 @@ const GRNView = ({ grn, onClose }) => {
               <h3 className="font-medium text-gray-900 dark:text-white mb-2">GRN Information</h3>
               <div className="space-y-1 text-sm">
                 <p><span className="text-gray-600 dark:text-gray-400">Date:</span> {format(new Date(grn.createdAt), 'MMM dd, yyyy HH:mm')}</p>
-                <p><span className="text-gray-600 dark:text-gray-400">Created By:</span> {grn.createdBy}</p>
+                <p><span className="text-gray-600 dark:text-gray-400">Created By:</span> {grn.cashierName || grn.createdBy || 'Unknown'}</p>
+                <p><span className="text-gray-600 dark:text-gray-400">Created Email:</span> {grn.creatorEmail || grn.createdBy}</p>
                 <p><span className="text-gray-600 dark:text-gray-400">Status:</span> <span className="capitalize">{grn.status}</span></p>
               </div>
             </div>

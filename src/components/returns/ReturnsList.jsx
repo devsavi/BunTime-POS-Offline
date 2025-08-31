@@ -25,16 +25,9 @@ const ReturnsList = () => {
     };
   }, [selectedReturn]);
 
-  // Filter returns by current user and status
-  // Debug log to see what we're working with
-  console.log('Current User:', currentUser);
-  console.log('All Returns:', returns);
-
+  // Filter returns by status only
   const filteredReturns = returns.filter(returnItem => {
-    const matchesUser = returnItem.createdBy === currentUser.id;
-    console.log('Return Item:', returnItem, 'Matches User?', matchesUser);
-    const matchesStatus = statusFilter === 'all' || returnItem.status === statusFilter;
-    return matchesUser && matchesStatus;
+    return statusFilter === 'all' || returnItem.status === statusFilter;
   });
 
   const getStatusIcon = (status) => {
@@ -85,7 +78,7 @@ const ReturnsList = () => {
       {/* Returns List */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">My Return Requests</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">All Return Requests</h3>
         </div>
 
         {filteredReturns.length === 0 ? (
@@ -109,6 +102,9 @@ const ReturnsList = () => {
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Date
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    Cashier
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Customer
@@ -135,6 +131,9 @@ const ReturnsList = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                       {format(new Date(returnItem.createdAt), 'MMM dd, yyyy HH:mm')}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                      {returnItem.cashierName || returnItem.cashierEmail?.split('@')[0]}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                       {returnItem.customerName || 'N/A'}

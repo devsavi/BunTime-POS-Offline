@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useReturns } from '../../contexts/ReturnsContext';
 import { useInventory } from '../../contexts/InventoryContext';
 import { useShop } from '../../contexts/ShopContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { useBilling } from '../../contexts/BillingContext';
 import { useTranslation } from 'react-i18next';
 import { X, Plus, Search, Save, Trash2, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -32,6 +34,8 @@ const ReturnForm = ({ onClose }) => {
   const { addReturn, generateReturnNumber, validateReturnQuantities } = useReturns();
   const { products } = useInventory();
   const { shopSettings } = useShop();
+  const { currentUser } = useAuth();
+  const { selectedCashier } = useBilling();
   const { t } = useTranslation();
 
   React.useEffect(() => {
@@ -158,7 +162,12 @@ const ReturnForm = ({ onClose }) => {
         ...formData,
         items: processedItems,
         totalValue: calculateTotal(),
-        totalItems: selectedItems.reduce((sum, item) => sum + item.quantity, 0)
+        totalItems: selectedItems.reduce((sum, item) => sum + item.quantity, 0),
+        createdBy: currentUser.uid,
+        creatorEmail: currentUser.email,
+        creatorName: currentUser.name,
+        cashierId: selectedCashier?.id || 'default',
+        cashierName: selectedCashier?.name || 'Cashier'
       };
 
       const result = await addReturn(returnData);
